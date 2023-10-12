@@ -2924,6 +2924,10 @@ main( int argc, char **argv )
     WSAStartup( 0x101, &wsadata);
 #endif /* _WIN32 */
 
+#ifdef PREVENT_SIGINT
+    signal(SIGINT, SIG_IGN);
+#endif
+
     /* initialization */
     getarg( argc, argv );
 
