@@ -1,7 +1,7 @@
 *~
 *.obj
 *.o
-*.exe
+# *.exe
 *.zip
 connect
 version

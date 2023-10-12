@@ -5,9 +5,19 @@
 ### 
 
 ifeq ($(OS), Windows_NT)
-    UNAME := Windows
+	ifeq '$(findstring ;,$(PATH))' ';'
+    	UNAME := Windows
+	else
+		ifeq ($(USE_MINGW_W64),1)
+			UNAME := MINGW_W64
+		else
+			UNAME := Cygwin
+		endif
+	endif
 else
     UNAME := $(shell uname -s)
+	UNAME := $(patsubst CYGWIN%,Cygwin,$(UNAME))
+	# TODO: MSYS, MINGW
 endif
 
 CC=gcc
@@ -32,6 +42,13 @@ ifeq ($(UNAME), Windows)
 	LDLIBS+=-ccc-gcc-name llvm-gcc.exe
     endif
     LDLIBS := ${LDLIBS} -lws2_32 -liphlpapi
+    CFLAGS := ${CFLAGS} -DPREVENT_SIGINT
+endif 	
+
+ifeq ($(UNAME), MINGW_W64)
+	CC := x86_64-w64-mingw32-gcc
+	LDLIBS := ${LDLIBS} -lws2_32 -liphlpapi
+	CFLAGS := ${CFLAGS} -DPREVENT_SIGINT
 endif
 
 all: connect

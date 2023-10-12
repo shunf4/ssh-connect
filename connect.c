@@ -209,7 +209,9 @@
  *               available on win32 platform only and needs to link with
  *               iphlpapi.lib.
  ***********************************************************************/
-
+#ifdef __CYGWIN__
+#define _GNU_SOURCE
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -222,7 +224,7 @@
 #include <fcntl.h>
 #include <signal.h>
 
-#ifdef __CYGWIN32__
+#ifdef __CYGWIN__
 #undef _WIN32
 #endif
 
@@ -285,11 +287,11 @@
 */
 static char *usage = "usage: %s [-dnhst45] [-p local-port]"
 #ifdef _WIN32
-#ifdef __CYGWIN32__
+#ifdef __CYGWIN__
 "[-w timeout] \n"                               /* cygwin cannot -R */
-#else  /* not __CYGWIN32__ */
+#else  /* not __CYGWIN__ */
 " \n"                                           /* VC cannot -w nor -R  */
-#endif /* not __CYGWIN32__ */
+#endif /* not __CYGWIN__ */
 #else  /* not _WIN32 */
 /* help message for UNIX */
 "[-R resolve] [-w timeout] \n"
@@ -1760,13 +1762,13 @@ set_timeout(int timeout)
         alarm( 0 );
     } else {
         debug( "setting timeout: %d seconds\n", timeout );
-        signal(SIGALRM, (__sighandler_t)sig_timeout);
+        signal(SIGALRM, (sighandler_t)sig_timeout);
         alarm( timeout );
     }
 }
 #endif
 
-#if !defined(_WIN32) && !defined(__CYGWIN32__) && !defined(__INTERIX)
+#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(__INTERIX)
 void
 switch_ns (struct sockaddr_in *ns)
 {
@@ -1775,7 +1777,7 @@ switch_ns (struct sockaddr_in *ns)
     _res.nscount = 1;
     debug("Using nameserver at %s\n", inet_ntoa(ns->sin_addr));
 }
-#endif /* !_WIN32 && !__CYGWIN32__ && !__INTERIX */
+#endif /* !_WIN32 && !__CYGWIN__ && !__INTERIX */
 
 /* TODO: IPv6
    TODO: fallback if askpass execution failed.
@@ -2015,16 +2017,16 @@ readpass( const char* prompt, ...)
     va_end(args);
 
     if ( getparam(ENV_SSH_ASKPASS)
-#if !defined(_WIN32) && !defined(__CYGWIN32__)
+#if !defined(_WIN32) && !defined(__CYGWIN__)
          && getenv("DISPLAY")
-#endif /* not _WIN32 && not __CYGWIN32__ */
+#endif /* not _WIN32 && not __CYGWIN__ */
         ) {
         /* use ssh-askpass to get password */
         FILE *fp;
         char *askpass = getparam(ENV_SSH_ASKPASS), *cmd;
 	int cmd_size = strlen(askpass) +1 +1 +strlen(buf) +1 +1;
         cmd = xmalloc(cmd_size);
-#if defined(_WIN32) && !defined(__CYGWIN32__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 	{
 	    /* Normalize path string of command ('/' => '\\').  This is
 	       required for the case of env value is for the cygwin ssh
@@ -2038,7 +2040,7 @@ readpass( const char* prompt, ...)
 		p++;
 	    }
 	}
-#endif	/* _WIN32 && not __CYGWIN32__ */
+#endif	/* _WIN32 && not __CYGWIN__ */
         snprintf(cmd, cmd_size, "%s \"%s\"", askpass, buf);
         debug("executing: %s", cmd);
         fp = popen(cmd, "r");
@@ -2977,10 +2979,10 @@ retry:
     }
 
     /** resolve destination host (SOCKS) **/
-#if !defined(_WIN32) && !defined(__CYGWIN32__) && !defined(__INTERIX)
+#if !defined(_WIN32) && !defined(__CYGWIN__) && !defined(__INTERIX)
     if (socks_ns.sin_addr.s_addr != 0)
         switch_ns (&socks_ns);
-#endif /* not _WIN32 && not __CYGWIN32__ && !defined(__INTERIX) */
+#endif /* not _WIN32 && not __CYGWIN__ && !defined(__INTERIX) */
 
     /** relay negociation **/
     switch ( relay_method ) {
