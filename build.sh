@@ -23,8 +23,8 @@ and set ProxyCommand to C:/cygwin64/bin/connect-proxy-1-105-fix-5-cygwin.exe in 
 # MinGW w64 version
 
 (
-set -x
+# set -x
 
-# x86_64-w64-mingw32-gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-5-mingw-w64 -lwsock32 -liphlpapi
+x86_64-w64-mingw32-gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-5-ONLY_FOR_WITHOUT_CYGWIN-mingw-w64 -lwsock32 -liphlpapi
 
 )
