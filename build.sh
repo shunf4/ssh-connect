@@ -8,23 +8,23 @@ Cygwin version is the only recommend version on Windows with Cygwin installed. (
 
 (
 set -x
-# gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-1-cygwin -lwsock32 -liphlpapi
-#gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-1-cygwin
-gcc -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-1-cygwin
+# gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-5-cygwin -lwsock32 -liphlpapi
+#gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-5-cygwin
+gcc -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-5-cygwin
 
 )
 
 echo 'Then:
 
-cp -v connect-proxy-1-105-fix-1-cygwin.exe /usr/bin/
+cp -v connect-proxy-1-105-fix-5-cygwin.exe /usr/bin/
 
-and set ProxyCommand to C:/cygwin64/bin/connect-proxy-1-105-fix-1-cygwin.exe in ssh config. '
+and set ProxyCommand to C:/cygwin64/bin/connect-proxy-1-105-fix-5-cygwin.exe in ssh config. '
 
 # MinGW w64 version
 
 (
 set -x
 
-# x86_64-w64-mingw32-gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-1-mingw-w64 -lwsock32 -liphlpapi
+# x86_64-w64-mingw32-gcc -DPREVENT_SIGINT -DSOCKLEN_T=unsigned connect.c -o connect-proxy-1-105-fix-5-mingw-w64 -lwsock32 -liphlpapi
 
 )
