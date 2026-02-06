@@ -2928,6 +2928,9 @@ main( int argc, char **argv )
 
 #ifdef PREVENT_SIGINT
     signal(SIGINT, SIG_IGN);
+#ifdef _WIN32
+    SetConsoleCtrlHandler(NULL, TRUE);
+#endif /* _WIN32 */
 #endif
 
     /* initialization */
